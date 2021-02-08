@@ -14,6 +14,7 @@ mcDrvModule-y := \
 	clock.o \
 	fastcall.o \
 	iwp.o \
+	logging.o \
 	main.o \
 	mcp.o \
 	mmu.o \
@@ -23,10 +24,6 @@ mcDrvModule-y := \
 	session.o \
 	teeclientapi.o \
 	user.o
-
-ifeq ($(CONFIG_TRUSTONIC_TEE_LOG),y)
-mcDrvModule-y += logging.o
-endif
 
 # Release mode by default
 ccflags-y += -DNDEBUG

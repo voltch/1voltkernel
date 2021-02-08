@@ -1463,8 +1463,6 @@ static struct device_attribute *fp_attrs[] = {
 
 static void vfsspi_work_func_debug(struct work_struct *work)
 {
-	return;
-
 	pr_info("%s power:%d, irq:%d, tz:%d, type:%s, cnt_irq:%d\n",
 		__func__,
 		g_data->ldo_onoff,
