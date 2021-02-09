@@ -508,7 +508,7 @@ int decon_wait_fence(struct sync_fence *fence)
 			fence, fence->name, atomic_read(&fence->status));
 #endif
 	err = sync_fence_wait(fence, 900);
-	#ifdef CONFIG_DECON_EVENT_LOG
+#ifdef CONFIG_DECON_EVENT_LOG
 	if (err < 0)
 		decon_warn("%s: error waiting on acquire fence: %d\n", acquire_fence_log, err);
 #endif
