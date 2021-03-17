@@ -2746,8 +2746,10 @@ static int decon_set_win_config(struct decon_device *decon,
 	if (ret)
 		goto err_prepare;
 
-	if (win_data->fence >= 0)
+	if (win_data->fence >= 0) {
+		devfreq_boost_kick(DEVFREQ_EXYNOS_MIF);
 		decon_install_fence(fence, win_data->fence);
+	}
 
 	decon_hiber_block(decon);
 
