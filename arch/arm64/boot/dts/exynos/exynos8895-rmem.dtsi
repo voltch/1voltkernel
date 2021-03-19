@@ -25,14 +25,6 @@
 			id = <10>;
 		};
 
-		secure_camera {
-			compatible = "exynos8890-ion,secure_camera";
-			ion,secure;
-			reg = <0x0 0xD0000000 0x1400000>;
-			id = <11>;
-		};
-
-
 		video_stream {
 			compatible = "exynos8890-ion,vstream";
 			ion,secure;

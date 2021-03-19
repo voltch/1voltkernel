@@ -98,7 +98,7 @@ static int abox_iommu_fault_handler(
 		struct iommu_domain *domain, struct device *dev,
 		unsigned long fault_addr, int fault_flags, void *token)
 {
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	struct abox_data *data = token;
 	abox_dbg_print_gpr(&data->pdev->dev, data);
 #endif
@@ -126,7 +126,7 @@ static void exynos_abox_panic_handler(void)
 		}
 		has_run = true;
 
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 		abox_dbg_dump_gpr(dev, data, ABOX_DBG_DUMP_KERNEL, "panic");
 #endif
 		abox_cpu_pm_ipc(dev, false);
@@ -136,7 +136,7 @@ static void exynos_abox_panic_handler(void)
 		abox_cpu_power(true);
 		abox_cpu_enable(true);
 		mdelay(100);
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 		abox_dbg_dump_mem(dev, data, ABOX_DBG_DUMP_KERNEL, "panic");
 #endif
 	} else {
@@ -4102,7 +4102,7 @@ static void abox_system_ipc_handler(struct device *dev,
 	case ABOX_REQUEST_SYSCLK:
 		abox_request_mif_freq(dev, system_msg->param1);
 		break;
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	case ABOX_REPORT_LOG:
 		result = abox_log_register_buffer(dev, system_msg->param1,
 				abox_addr_to_kernel_addr(data,
@@ -4115,7 +4115,7 @@ static void abox_system_ipc_handler(struct device *dev,
 #endif
 	case ABOX_FLUSH_LOG:
 		break;
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	case ABOX_REPORT_DUMP:
 		result = abox_dump_register_buffer(dev, system_msg->param1,
 				system_msg->bundle.param_bundle,
@@ -4130,7 +4130,7 @@ static void abox_system_ipc_handler(struct device *dev,
 		}
 		break;
 #endif
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	case ABOX_FLUSH_DUMP:
 		abox_dump_period_elapsed(system_msg->param1,
 				system_msg->param2);
@@ -4183,7 +4183,7 @@ static void abox_system_ipc_handler(struct device *dev,
 		case 2:
 			addr = abox_addr_to_kernel_addr(data,
 					system_msg->bundle.param_s32[0]);
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 			abox_dbg_print_gpr_from_addr(dev, data, addr);
 			abox_dbg_dump_gpr_from_addr(dev, addr,
 					ABOX_DBG_DUMP_FIRMWARE, type);
@@ -4191,7 +4191,7 @@ static void abox_system_ipc_handler(struct device *dev,
 					ABOX_DBG_DUMP_FIRMWARE, type);
 #endif
 			break;
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 		case 4:
 			abox_dbg_print_gpr(dev, data);
 			abox_dbg_dump_gpr(dev, data, ABOX_DBG_DUMP_VSS, type);
@@ -4199,7 +4199,7 @@ static void abox_system_ipc_handler(struct device *dev,
 			break;
 #endif
 		default:
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 			abox_dbg_print_gpr(dev, data);
 			abox_dbg_dump_gpr(dev, data,
 					ABOX_DBG_DUMP_FIRMWARE, type);
@@ -4339,7 +4339,7 @@ static irqreturn_t abox_irq_handler(int irq, void *dev_id)
 		break;
 	}
 
-#ifdef SND_SOC_SAMSUNG_ABOX_DEBUG
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	abox_log_schedule_flush_all(dev);
 #endif
 
