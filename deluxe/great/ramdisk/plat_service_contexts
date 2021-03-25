@@ -237,7 +237,6 @@ android.samsung.IRemosaicDaemon             u:object_r:remosaicd_service:s0
 persona                                     u:object_r:persona_service:s0
 persona_policy                              u:object_r:persona_service:s0
 persona_state_manager                       u:object_r:persona_service:s0
-auditlog                                    u:object_r:auditlog_service:s0
 apn_settings_policy                         u:object_r:EDM_Policy_service:s0
 application_policy                          u:object_r:EDM_Policy_service:s0
 apppermission_control_policy                u:object_r:EDM_Policy_service:s0

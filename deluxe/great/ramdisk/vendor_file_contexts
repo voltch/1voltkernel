@@ -335,7 +335,6 @@
 /data/biometrics(/.*)?		u:object_r:biometrics_data_file:s0
 /data/preparefbe(/.*)?		u:object_r:media_rw_data_file:s0
 /data/misc/lpnet(/.*)?		u:object_r:lpnet_data_file:s0
-/data/misc/audit(/.*)?		u:object_r:audit_log:s0
 /mnt/secure/asec(/.*)?		u:object_r:asec_apk_file:s0
 /efs/ims_setting(/.*)?		u:object_r:sec_efs_file:s0
 /data/vendor/nfc(/.*)?		u:object_r:nfc_vendor_data_file:s0
@@ -441,7 +440,6 @@
 /mnt/vendor/efs/imei(/.*)?		u:object_r:imei_efs_file:s0
 /mnt/vendor/efs/misc(/.*)?		u:object_r:sec_efs_file:s0
 /mnt/vendor/efs/\.drm(/.*)?		u:object_r:drm_efs_file:s0
-/data/misc/integrity(/.*)?		u:object_r:audit_log:s0
 /data/vendor/log/vcd(/.*)?		u:object_r:vendor_vcd_log_file:s0
 /dev/\.secure_storage(/.*)?		u:object_r:secure_storage_device:s0
 /data/vendor/log/dmd(/.*)?		u:object_r:vendor_dmd_log_file:s0
@@ -880,7 +878,6 @@
 /system/bin/charon		u:object_r:charon_exec:s0
 /system/bin/insthk		u:object_r:insthk_exec:s0
 /dev/block/mmcblk0		u:object_r:root_block_device:s0
-/system/bin/auditd		u:object_r:auditd_exec:s0
 /dev/umts_ramdump0		u:object_r:radio_device:s0
 /system/bin/eprosed		u:object_r:eprosed_exec:s0
 /dev/snfc_intu_poll		u:object_r:nfc_device:s0
@@ -888,7 +885,6 @@
 /system/bin/adptmon		u:object_r:adptmon_exec:s0
 /system/bin/sec-ril		u:object_r:sec-ril_exec:s0
 /data/system/kb\.bin		u:object_r:drm_data_file:s0
-/audit_filter_table		u:object_r:rootfs:s0
 /system/bin/icd_etc		u:object_r:icdaemon_exec:s0
 /dev/audience_a2220		u:object_r:audio_device:s0
 /dev/power_on_alarm		u:object_r:alarm_device:s0
@@ -903,7 +899,6 @@
 /dev/felica_int_poll		u:object_r:felicashell_device:s0
 /system/bin/fsslcmnd		u:object_r:fsslcmnd_exec:s0
 /sys/power/ftm_sleep		u:object_r:sysfs_ss_writable:s0
-/system/bin/edmaudit		u:object_r:edmaudit_exec:s0
 /data/\.socket_stream		u:object_r:ddexe_socket:s0
 /efs/apn-changes\.xml		u:object_r:sec_efs_file:s0
 /efs/nv_fsm_data\.bin		u:object_r:bin_nv_data_efs_file:s0

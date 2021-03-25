@@ -57,18 +57,11 @@ on init
     symlink /system/bin /bin
     symlink /system/etc /etc
 
-    # Backward compatibility.
-    symlink /sys/kernel/debug /d
-
     # Link /vendor to /system/vendor for devices without a vendor partition.
     symlink /system/vendor /vendor
 
     # MirrorLink permission
     mkdir /dev/socket/mlaudio 0770 audioserver system
-
-    # sdcard ramdump
-    chown system system /sys/module/sec_debug/parameters/dump_sink
-    chmod 0600 /sys/module/sec_debug/parameters/dump_sink
 
     # Create energy-aware scheduler tuning nodes
     mkdir /dev/stune
@@ -256,18 +249,6 @@ on init
     chmod 0600 /dev/cg2_bpf
     mount bpf bpf /sys/fs/bpf nodev noexec nosuid
 
-    # Create location for fs_mgr to store abbreviated output from filesystem
-    # checker programs.
-    mkdir /dev/fscklogs 0770 root system
-
-    # pstore/ramoops previous console log
-    mount pstore pstore /sys/fs/pstore nodev noexec nosuid
-    chown system log /sys/fs/pstore/console-ramoops
-    chmod 0440 /sys/fs/pstore/console-ramoops
-    chown system log /sys/fs/pstore/console-ramoops-0
-    chmod 0440 /sys/fs/pstore/console-ramoops-0
-    chown system log /sys/fs/pstore/pmsg-ramoops-0
-    chmod 0440 /sys/fs/pstore/pmsg-ramoops-0
 
     # enable armv8_deprecated instruction hooks
     write /proc/sys/abi/swp 1
@@ -333,8 +314,6 @@ on property:sys.boot_from_charger_mode=1
 
 on load_persist_props_action
     load_persist_props
-    start logd
-    start logd-reinit
 
 # Indicate to fw loaders that the relevant mounts are up.
 on firmware_mounts_complete
@@ -387,7 +366,6 @@ on post-fs
     #     /factory/factory.prop
     load_system_props
     # start essential services
-    start logd
     start servicemanager
     start hwservicemanager
     start vndservicemanager
@@ -410,10 +388,6 @@ on post-fs
     # VOLD for move to sdcard.
     mount tmpfs tmpfs /mnt/secure/asec shared rec
 
-    # Make sure /sys/kernel/debug (if present) is labeled properly
-    # Note that tracefs may be mounted under debug, so we need to cross filesystems
-    restorecon --recursive --cross-filesystems /sys/kernel/debug
-
     # We chown/chmod /cache again so because mount is run as root + defaults
     chown system cache /cache
     chmod 0770 /cache
@@ -428,24 +402,6 @@ on post-fs
     mkdir /cache/backup_stage 0700 system system
     mkdir /cache/backup 0700 system system
 
-    #change permissions on vmallocinfo so we can grab it from bugreports
-    chown root log /proc/vmallocinfo
-    chmod 0440 /proc/vmallocinfo
-
-    chown root log /proc/slabinfo
-    chmod 0440 /proc/slabinfo
-
-    # Bluetooth
-    chown root log /proc/bluetooth/uart/log
-
-    #change permissions on kmsg & sysrq-trigger so bugreports can grab kthread stacks
-    chown root system /proc/kmsg
-    chmod 0440 /proc/kmsg
-    chown root system /proc/sysrq-trigger
-    chmod 0220 /proc/sysrq-trigger
-    chown system log /proc/last_kmsg
-    chmod 0440 /proc/last_kmsg
-    chown system log /proc/sec_log
 
     # make the selinux kernel policy world-readable
     chmod 0444 /sys/fs/selinux/policy
@@ -458,23 +414,13 @@ on post-fs
     # mkdir /metadata/vold
     # chmod 0700 /metadata/vold
 
-    # make fsdbg on /dev for filesystem debug info.
-    mkdir /dev/fsdbg 0775 root system
-
     omc_update
     start scs
 
 on late-fs
-    # Ensure that tracefs has the correct permissions.
-    # This does not work correctly if it is called in post-fs.
-    chmod 0755 /sys/kernel/debug/tracing
 
     # HALs required before storage encryption can get unlocked (FBE/FDE)
     class_start early_hal
-
-    # For kperfmond.
-    chown system log /data/log/remaining_olog
-    chmod 0440 /data/log/remaining_olog
 
 on post-fs-data
 
@@ -651,10 +597,6 @@ on post-fs-data
     write /data/misc/conn/.wificable.info E
     chown system root /data/misc/conn/.wificable.info
     chmod 0666 /data/misc/conn/.wificable.info
-
-# [ SEC_PRODUCT_FEATURE_SECURITY_SUPPORT_FIVE
-    mkdir /data/misc/integrity 0775 vendor_audit system
-# ] SEC_PRODUCT_FEATURE_SECURITY_SUPPORT_FIVE
 
 # [ SEC_AASA_ASKS_PORTING
     # Seperate location for storing security policy files on data
@@ -883,13 +825,6 @@ on boot
 
 	mkdir /efs/afc 0700 system system
 
-    # sec abc
-    chown system radio /sys/class/sec/sec_abc/enabled
-    chmod 0664 /sys/class/sec/sec_abc/enabled
-    chown system radio /sys/class/sec/sec_abc/log
-    chmod 0664 /sys/class/sec/sec_abc/log
-    chown system radio /sys/class/sec/sec_abc_hub/enable
-    chmod 0664 /sys/class/sec/sec_abc_hub/enable
 
     # Memory management.  Basic kernel parameters, and allow the high
     # level system server to be able to adjust the kernel OOM driver
@@ -908,9 +843,6 @@ on boot
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
     # write /proc/sys/vm/dirty_background_ratio  5
-
-    # Permissions for recovery_cause
-    chown system system /sys/class/sec/sec_debug/recovery_cause
 
     # svcled
     chown system system /sys/class/sec/led/led_lowpower
@@ -1010,10 +942,10 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
     # Permission for DVFS helper
-    chown system radio /sys/power/cpufreq_min_limit
-    chmod 0664 /sys/power/cpufreq_min_limit
-    chown system radio /sys/power/cpufreq_max_limit
-    chmod 0664 /sys/power/cpufreq_max_limit
+    chown root root /sys/power/cpufreq_min_limit
+    chmod 0000 /sys/power/cpufreq_min_limit
+    chown root root /sys/power/cpufreq_max_limit
+    chmod 0000 /sys/power/cpufreq_max_limit
 
 	# permission for CHARGING
 	mkdir /efs/Battery 0775 radio system
@@ -1594,8 +1526,6 @@ on nonencrypted
     class_start main
     class_start late_start
 
-on property:sys.init_log_level=*
-    loglevel ${sys.init_log_level}
 
 on charger
     chmod 0664 /sys/class/power_supply/battery/batt_temp_table
@@ -1640,8 +1570,6 @@ on property:vold.decrypt=trigger_reset_main
 on property:vold.decrypt=trigger_load_persist_props
     load_persist_props
     start scs
-    start logd
-    start logd-reinit
 
 on property:vold.decrypt=trigger_post_fs_data
     trigger post-fs-data
@@ -1752,14 +1680,6 @@ service console /system/bin/sh
     group shell log readproc
     seclabel u:r:shell:s0
     setenv HOSTNAME console
-
-on property:ro.debuggable=1
-    # Give writes to anyone for the trace folder on debug builds.
-    # The folder is used to store method traces.
-    chmod 0773 /data/misc/trace
-    # Give reads to anyone for the window trace folder on debug builds.
-    chmod 0775 /data/misc/wmtrace
-    start console
 
 # LPM
 service lpm /system/bin/lpm

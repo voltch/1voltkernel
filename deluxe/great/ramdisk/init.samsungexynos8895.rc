@@ -2,11 +2,9 @@ import init.samsungexynos8895.usb.rc
 import init.baseband.rc
 import init.carrier.rc
 import init.gps.rc
-import atrace.rc
 
 on early-init
     mkdir /efs 0771 radio system
-    mount debugfs /sys/kernel/debug /sys/kernel/debug
 
 on init
     start watchdogd
@@ -55,15 +53,8 @@ on post-fs-data
     chmod 0644 /dev/freezer/thaw/tasks
     chmod 0644 /dev/freezer/thaw/cgroup.procs
 
-# Log data folder
-    mkdir /data/log 0771 radio system
-
-    mkdir /data/vendor 0771 radio system
-    mkdir /data/vendor/log 0771 radio system
 
 # Directories for audio
-    mkdir /data/log/abox 0771 audioserver system
-    mkdir /data/vendor/log/abox 0771 audioserver system
     mkdir /data/firmware 0770 audioserver system
     mkdir /efs/maxim 0770 audioserver audio
 
@@ -134,8 +125,6 @@ on post-fs-data
     mkdir /data/bio 0770 system system
     mkdir /data/bio/ir 0770 system system
 
-    chmod 0755 /sys/kernel/debug/tracing
-    restorecon /sys/kernel/debug/tracing/trace_marker
 
 # Permissions for PCIe
     chown system system /sys/devices/platform/116a0000.pcie0/pcie_sysfs
@@ -158,15 +147,7 @@ on boot
 # SSWAP
     write /proc/sys/vm/swappiness 130
 
-    # Allow to access debugfs for system:system
-    chmod 0755 /sys/kernel/debug
-    chown system system /sys/kernel/debug
-
     setprop ro.radio.noril no
-
-    # Set up kernel tracing, but disable it by default
-    chmod 0222 /sys/kernel/debug/tracing/trace_marker
-    write /sys/kernel/debug/tracing/tracing_on 0
 
     #migrate_os
     chown system radio /sys/devices/system/sec_os_ctrl/migrate_os
@@ -239,12 +220,12 @@ on boot
     chmod 0664 /sys/module/cpuidle/parameters/priv_disable
 
     #CPUFREQ
-    chown system system /sys/power/cpufreq_min_limit
-    chown system system /sys/power/cpufreq_max_limit
-    chown system system /sys/power/cpufreq_table
+    chown root root /sys/power/cpufreq_min_limit
+    chown root root /sys/power/cpufreq_max_limit
+    chown root root /sys/power/cpufreq_table
 
-    chmod 0664 /sys/power/cpufreq_min_limit
-    chmod 0664 /sys/power/cpufreq_max_limit
+    chmod 0000 /sys/power/cpufreq_min_limit
+    chmod 0000 /sys/power/cpufreq_max_limit
 
     # MSP Core Status
     chown system system /sys/devices/system/cpu/cpu1/online
@@ -277,8 +258,8 @@ on boot
     chmod 0664 /sys/power/cpuhotplug/max_online_cpu
 
     # cpu dvfs node
-    chown system system /sys/power/cpuhotplug/cpufreq_table
-    chmod 0664 /sys/power/cpuhotplug/cpufreq_table
+    chown root root /sys/power/cpuhotplug/cpufreq_table
+    chmod 0000 /sys/power/cpuhotplug/cpufreq_table
 
     # mif dvfs node
     chown radio system /sys/class/devfreq/17000010.devfreq_mif/available_frequencies
@@ -291,32 +272,32 @@ on boot
     chmod 0664 /sys/class/devfreq/17000020.devfreq_int/available_frequencies
     chown radio system /sys/class/devfreq/17000020.devfreq_int/min_freq
     chmod 0664 /sys/class/devfreq/17000020.devfreq_int/min_freq
-    chown radio system /sys/class/devfreq/17000020.devfreq_int/max_freq
-    chmod 0664 /sys/class/devfreq/17000020.devfreq_int/max_freq
+    chown root root /sys/class/devfreq/17000020.devfreq_int/max_freq
+    chmod 0000 /sys/class/devfreq/17000020.devfreq_int/max_freq
 
     # disp dvfs node
     chown radio system /sys/class/devfreq/17000040.devfreq_disp/available_frequencies
     chmod 0664 /sys/class/devfreq/17000040.devfreq_disp/available_frequencies
     chown radio system /sys/class/devfreq/17000040.devfreq_disp/min_freq
     chmod 0664 /sys/class/devfreq/17000040.devfreq_disp/min_freq
-    chown radio system /sys/class/devfreq/17000040.devfreq_disp/max_freq
-    chmod 0664 /sys/class/devfreq/17000040.devfreq_disp/max_freq
+    chown root root /sys/class/devfreq/17000040.devfreq_disp/max_freq
+    chmod 0000 /sys/class/devfreq/17000040.devfreq_disp/max_freq
 
     # cam dvfs node
     chown radio system /sys/class/devfreq/17000050.devfreq_cam/available_frequencies
     chmod 0664 /sys/class/devfreq/17000050.devfreq_cam/available_frequencies
     chown radio system /sys/class/devfreq/17000050.devfreq_cam/min_freq
     chmod 0664 /sys/class/devfreq/17000050.devfreq_cam/min_freq
-    chown radio system /sys/class/devfreq/17000050.devfreq_cam/max_freq
-    chmod 0664 /sys/class/devfreq/17000050.devfreq_cam/max_freq
+    chown root root /sys/class/devfreq/17000050.devfreq_cam/max_freq
+    chmod 0000 /sys/class/devfreq/17000050.devfreq_cam/max_freq
 
     # mali dvfs node
-    chown radio system /sys/devices/platform/13900000.mali/dvfs_table
-    chmod 0664 /sys/devices/platform/13900000.mali/dvfs_table
-    chown radio system /sys/devices/platform/13900000.mali/dvfs_min_lock
-    chmod 0664 /sys/devices/platform/13900000.mali/dvfs_min_lock
-    chown radio system /sys/devices/platform/13900000.mali/dvfs_max_lock
-    chmod 0664 /sys/devices/platform/13900000.mali/dvfs_max_lock
+    chown root root /sys/devices/platform/13900000.mali/dvfs_table
+    chmod 0000 /sys/devices/platform/13900000.mali/dvfs_table
+    chown root root /sys/devices/platform/13900000.mali/dvfs_min_lock
+    chmod 0000 /sys/devices/platform/13900000.mali/dvfs_min_lock
+    chown root root /sys/devices/platform/13900000.mali/dvfs_max_lock
+    chmod 0000 /sys/devices/platform/13900000.mali/dvfs_max_lock
 
     # Cstate node
     chown radio system /sys/module/cpuidle/parameters/off
@@ -345,14 +326,8 @@ on boot
     chown system system /d/asv_summary
     chmod 0660 /d/asv_summary
 
-# Support DM logging
-#    chmod 0770 /system/bin/dmd
-
 # Support Virtual Com
     chmod 0770 /system/bin/vcd
-
-# Support AP/CP log dump
-#    chmod 0770 /system/bin/sced
 
 # Permission for UART SWITCH
     chmod 0660 /sys/class/sec/switch/uart_sel
@@ -907,7 +882,7 @@ service argos-daemon /vendor/bin/argosd
 #    service cpboot-daemon /sbin/cbd -d -tss310 -bm -mm -P sda5
 #    class main
 #    user root
-#    group radio cache inet misc audio sdcard_rw log
+#    group radio cache inet misc audio sdcard_rw
 #    seclabel u:r:cbd:s0
 
 # DM daemon
@@ -991,12 +966,6 @@ service sem_daemon /system/bin/sem_daemon
 on property:sys.mobicoredaemon.enable=true
 	write /proc/iccc_ready 1
 
-# irisd
-service irisd /system/bin/irisd
-    class late_start
-    user system
-    group system
-
 # faced
 service faced /system/bin/faced
     class late_start
@@ -1006,12 +975,7 @@ service faced /system/bin/faced
 on property:sys.boot_completed=1
     setprop security.semdaemonfinish 0
     start sem_daemon
-    # Change permission for A-Box firmware logs file & GPR dump
-    chown audioserver system /sys/kernel/debug/abox/log-00
-    chown audioserver system /sys/devices/platform/13e50000.abox/13e50000.abox:abox_debug@0/gpr
-    chown audioserver system /sys/devices/platform/13e50000.abox/13e50000.abox:abox_debug@0/calliope_sram
-    chown audioserver system /sys/devices/platform/13e50000.abox/13e50000.abox:abox_debug@0/calliope_dram
-    chown audioserver system /sys/devices/platform/13e50000.abox/13e50000.abox:abox_debug@0/calliope_iva
+
 
 on property:security.semdaemonfinish=1
     stop sem_daemon

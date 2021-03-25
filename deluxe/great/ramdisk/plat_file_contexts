@@ -300,7 +300,6 @@
 /dev/socket/racoon		u:object_r:racoon_socket:s0
 /dev/socket/zygote		u:object_r:zygote_socket:s0
 /dev/usb_accessory		u:object_r:usbaccessory_device:s0
-/system/bin/atrace		u:object_r:atrace_exec:s0
 /system/bin/mke2fs		u:object_r:e2fs_exec:s0
 /dev/device-mapper		u:object_r:dm_device:s0
 /plat_sepolicy\.cil		u:object_r:sepolicy_file:s0
