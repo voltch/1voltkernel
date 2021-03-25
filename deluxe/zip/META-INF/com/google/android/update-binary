@@ -1,7 +1,5 @@
 #!/sbin/sh
 #
-# DeluxeKernel®
-# @AbrahamGC & @A.Raul
 #
 
 OUTFD=/proc/self/fd/$2;
@@ -11,7 +9,6 @@ print() { echo -e "ui_print $1\nui_print" >> $OUTFD; }
 
 extract() {
   [ -f /tmp/7za ] || { unzip -o "$ZIPFILE" "META-INF/7za" -p > "/tmp/7za"; chmod 755 /tmp/7za; }
-  [ -f /tmp/7za ] || { busybox unzip "$ZIPFILE" "META-INF/7za" -p > "/tmp/7za"; chmod 755 /tmp/7za; }
   case "$1" in
     --file) mkdir -p "$(dirname "$4")"; /tmp/7za e -so "$2" "$3" | cat > "$4" ;;
     --dir)
@@ -78,25 +75,10 @@ fi
 
 echo "progress 1.34 47" > $OUTFD
 
-print " "
-print " "
-print " "
-print "   ____       _                ____   ___  __  __ "
-print "  |  _ \  ___| |_   ___  _____|  _ \ / _ \|  \/  |"
-print "  | | | |/ _ \ | | | \ \/ / _ \ |_) | | | | |\/| |"
-print "  | |_| |  __/ | |_| |>  <  __/  _ <| |_| | |  | |"
-print "  |____/ \___|_|\__,_/_/\_\___|_| \_|\___/|_|  |_|"
-print "           _  _______ ____  _   _ _____ _     "
-print "          | |/ / ____|  _ \| \ | | ____| |    "
-print "          | ' /|  _| | |_) |  \| |  _| | |    "
-print "          | . \| |___|  _ <| |\  | |___| |___ "
-print "          |_|\_\_____|_| \_\_| \_|_____|_____|"
-print " "
-
 print "##"
 print "##   Checking compatibility ..."
 print "##"
-getbootloader | grep -q '[GN]95[05][FN]' || abort "##   DEVICE NOT COMPATIBLE WITH DELUXEKERNEL. NO FILE HAS BEEN CHANGED."
+getbootloader | grep -q '[GN]95[05][FN]' || abort "##   DEVICE NOT COMPATIBLE WITH VOLTKERNEL. NO FILE HAS BEEN CHANGED."
 
 for i in system data; do
   grep -q /$i /proc/mounts && umount /$i &>/dev/null
@@ -131,18 +113,6 @@ print "##   Flashing kernel ..."
 print "##"
 extract --img-tar "$ZIPFILE" deluxe/kernel.tar.xz "$model.img" /dev/block/platform/11120000.ufs/by-name/BOOT
 
-echo "$ZIPFILE" | grep -qi 'NOTWRP' && twrp="0" || twrp="1"
-if [[ "$twrp" == "1" ]]; then
-  print "##"
-  print "##   Flashing recovery ..."
-  print "##"
-  extract --img-tar "$ZIPFILE" deluxe/recovery.tar.xz "$model.img" /dev/block/platform/11120000.ufs/by-name/RECOVERY
-else
-  print "##"
-  print "##   Kept current recovery ..."
-  print "##"
-fi
-
 print "##"
 print "##   Flashing Magisk ..."
 print "##"
@@ -153,11 +123,6 @@ if [[ -d /tmp/adb ]]; then
   rm -rf /data/adb
   mv -f /tmp/adb /data || cp -rf /tmp/adb/. /data/adb
 fi
-
-print "##"
-print "##   Flashing BusyBox ..."
-print "##"
-flash_zip busybox
 
 print "##"
 print "##   Cleaning /system ..."
@@ -190,6 +155,5 @@ done;
 print "##"
 print "##   Done!"
 print "##"
-cat /tmp/recovery.log > /sdcard/deluxekernel_recovery.log
 rm -rf /tmp
 sync

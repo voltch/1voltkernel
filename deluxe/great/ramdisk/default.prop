@@ -51,9 +51,7 @@ log.tag.stats_log=I
 ro.bootimage.build.date=Fri Dec 18 11:14:32 KST 2020
 ro.bootimage.build.date.utc=1608257672
 ro.bootimage.build.fingerprint=samsung/greatltexx/greatlte:9/PPR1.180610.011/N950FXXSEDTL1:user/test-keys
-#
-# DELUXEROM_PROPERTIES
-#
+
 ro.securestorage.support=false
 ro.security.vaultkeeper.feature=0
 ro.config.knox=v30
