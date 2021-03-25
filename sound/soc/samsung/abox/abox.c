@@ -4115,7 +4115,6 @@ static void abox_system_ipc_handler(struct device *dev,
 #endif
 	case ABOX_FLUSH_LOG:
 		break;
-#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	case ABOX_REPORT_DUMP:
 		result = abox_dump_register_buffer(dev, system_msg->param1,
 				system_msg->bundle.param_bundle,
@@ -4129,13 +4128,10 @@ static void abox_system_ipc_handler(struct device *dev,
 					system_msg->param1, system_msg->param2);
 		}
 		break;
-#endif
-#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 	case ABOX_FLUSH_DUMP:
 		abox_dump_period_elapsed(system_msg->param1,
 				system_msg->param2);
 		break;
-#endif
 	case ABOX_END_CLAIM_SRAM:
 		data->ima_claimed = true;
 		wake_up(&data->ipc_wait_queue);
@@ -4177,37 +4173,32 @@ static void abox_system_ipc_handler(struct device *dev,
 		dev_err(dev, "%s(%08X, %08X, %08X) is reported from calliope\n",
 				type, system_msg->param1, system_msg->param2,
 				system_msg->param3);
-
+#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 		switch (system_msg->param1) {
 		case 1:
 		case 2:
 			addr = abox_addr_to_kernel_addr(data,
 					system_msg->bundle.param_s32[0]);
-#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 			abox_dbg_print_gpr_from_addr(dev, data, addr);
 			abox_dbg_dump_gpr_from_addr(dev, addr,
 					ABOX_DBG_DUMP_FIRMWARE, type);
 			abox_dbg_dump_mem(dev, data,
 					ABOX_DBG_DUMP_FIRMWARE, type);
-#endif
 			break;
-#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 		case 4:
 			abox_dbg_print_gpr(dev, data);
 			abox_dbg_dump_gpr(dev, data, ABOX_DBG_DUMP_VSS, type);
 			abox_dbg_dump_mem(dev, data, ABOX_DBG_DUMP_VSS, type);
 			break;
-#endif
 		default:
-#ifdef CONFIG_SND_SOC_SAMSUNG_ABOX_DEBUG
 			abox_dbg_print_gpr(dev, data);
 			abox_dbg_dump_gpr(dev, data,
 					ABOX_DBG_DUMP_FIRMWARE, type);
 			abox_dbg_dump_mem(dev, data,
 					ABOX_DBG_DUMP_FIRMWARE, type);
-#endif
 			break;
 		}
+#endif
 		break;
 	}
 	default:

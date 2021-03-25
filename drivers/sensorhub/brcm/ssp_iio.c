@@ -104,7 +104,7 @@ static int ssp_push_iio_buffer(struct iio_dev *indio_dev, u64 timestamp, u8 *dat
 
 void report_meta_data(struct ssp_data *data, struct sensor_value *s)
 {
-	pr_info("[SSP]: %s - what: %d, sensor: %d\n", __func__,
+	pr_debug("[SSP]: %s - what: %d, sensor: %d\n", __func__,
 		s->meta_data.what, s->meta_data.sensor);
 
 	if (s->meta_data.sensor == ACCELEROMETER_SENSOR) {
@@ -397,7 +397,6 @@ void report_scontext_data(struct ssp_data *data,
 	memcpy(printbuf, scontextbuf, 72);
 	memcpy(&start, printbuf+4, sizeof(short));
 	memcpy(&end, printbuf+6, sizeof(short));
-	ssp_sensorhub_log("ssp_AlgoPacket", printbuf + 8, end - start + 1);
 	mutex_lock(&data->indio_scontext_dev->mlock);
 	iio_push_to_buffers(data->indio_scontext_dev, scontextbuf);
 	mutex_unlock(&data->indio_scontext_dev->mlock);
