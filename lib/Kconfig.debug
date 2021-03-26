@@ -25,7 +25,7 @@ config PRINTK_PROCESS
 config MESSAGE_LOGLEVEL_DEFAULT
 	int "Default message log level (1-7)"
 	range 1 7
-	default "4"
+	default "1"
 	help
 	  Default log level for printk statements with no specified priority.
 
