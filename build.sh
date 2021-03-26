@@ -83,9 +83,10 @@ mv kernel.tar.xz zip/deluxe/kernel.tar.xz
 cd zip
 zip -r -9 "${ZIP_NAME}".zip META-INF deluxe
 rm -rf ../"${ZIP_NAME}".zip
-mv "${ZIP_NAME}".zip ../"${ZIP_NAME}".zip
+mv "${ZIP_NAME}".zip /home/volt/Downloads/"${ZIP_NAME}".zip
 rm -rf deluxe/kernel.tar.xz
 cd ../../
 rm -rf deluxe/*.img
+rm -rf arch/arm64/boot/dtb.img
 clear
 echo -e " BUILT ${ZIP_NAME}.zip. ${NONE}"
