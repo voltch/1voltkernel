@@ -805,13 +805,6 @@ on zygote-start && property:ro.crypto.state=encrypted && property:ro.crypto.type
 
 on boot
 
-    write /proc/sys/vm/swappiness 80
-    write /sys/block/zram0/disksize 2G
-
-    exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
-    exec u:r:init:s0 -- /system/bin/swapon /dev/block/zram0
-    
-    
     # basic network init
     ifup lo
     hostname localhost
@@ -1852,7 +1845,6 @@ on property:ro.csc.sales_code=*
 on property:sys.boot_completed=1
     stop proca
     stop secure_storage
-    write /proc/sys/vm/swappiness 80
     # VM tunables for optimized IO performance
     write /proc/sys/vm/dirty_expire_centisecs 2000
     write /proc/sys/vm/dirty_writeback_centisecs 5000
