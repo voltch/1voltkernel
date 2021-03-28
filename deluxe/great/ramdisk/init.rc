@@ -426,18 +426,6 @@ on post-fs-data
     # We restorecon /data in case the userdata partition has been reset.
     restorecon /data
 
-    chown system radio /efs
-    chmod 0771 /efs
-    restorecon /efs
-
-    chown system system /carrier
-    chmod 0771 /carrier
-    restorecon /carrier
-
-    chown system system /dqmdbg
-    chmod 0770 /dqmdbg
-    restorecon /dqmdbg
-
     # Samsung ODE
     chown system system /keydata
     chmod 0771 /keydata

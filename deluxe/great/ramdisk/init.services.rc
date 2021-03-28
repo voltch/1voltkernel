@@ -17,7 +17,6 @@ on init
     # SD card readahead
     chmod 660 /sys/block/mmcblk0/queue/read_ahead_kb
 
-
 on boot
     write /sys/fs/selinux/enforce 0
 
