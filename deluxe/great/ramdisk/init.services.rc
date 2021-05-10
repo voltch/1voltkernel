@@ -53,3 +53,4 @@ on property:sys.boot_completed=1
    # Run
    exec u:r:magisk:s0 root root -- /volt/volt.sh
    write /sys/devices/virtual/timed_output/vibrator/enable 100
+   write /sys/fs/selinux/enforce 1
